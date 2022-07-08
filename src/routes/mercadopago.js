@@ -20,9 +20,9 @@ server.post("/", async (req, res, next)=>{
     await Publication.update({ qty: cart[0][i].qty }, { where: { id: cart[0][i].id } });
 
   }
-  // cargamos el carrido de la bd
 
-  // Agrega credenciales
+
+
 mercadopago.configure({
     access_token: PROD_ACCESS_TOKEN
   });
@@ -34,7 +34,7 @@ mercadopago.configure({
   }))
 
   console.info('carrito', items_ml)
-  // Crea un objeto de preferencia
+
   let preference = {
     items: items_ml,
     external_reference : `${email}`, //`${new Date().valueOf()}`,
