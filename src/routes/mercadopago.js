@@ -110,28 +110,11 @@ server.get("/pagos", async  (req, res)=>{
 
     return res.redirect("https://25a-front.vercel.app/home")
 
-  }
+  } else {
 
-  Order.findByPk(external_reference)
-  .then((order) => {
-    order.payment_id= payment_id
-    order.payment_status= payment_status
-    order.merchant_order_id = merchant_order_id
-    order.status = "created"
-    // console.info('Salvando order')
-    order.save()
-    .then((_) => {
-      console.info('redirect success')
-      
-      return res.redirect("https://25a-front.vercel.app")
-    }).catch((err) =>{
-      console.error('error al salvar', err)
-      return res.redirect(`https://25a-front.vercel.app/?error=${err}&where=al+salvar`)
-    })
-  }).catch(err =>{
-    console.error('error al buscar', err)
-    return res.redirect(`https://25a-front.vercel.app/?error=${err}&where=al+buscar`)
-  })
+    return res.redirect("https://25a-front.vercel.app/home")
+
+  }
 
 
   //proceso los datos del pago 
