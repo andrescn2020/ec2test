@@ -49,9 +49,9 @@ mercadopago.configure({
 
   .then(function(response){
     console.info('respondio')
-
+  // Este valor reemplazará el string"<%= global.id %>" en tu HTML
     global.id = response.body.id;
-
+    //console.log(response.body)
     res.json({id: global.id, init_point: response.body.init_point});
   }).catch(function(error){
     console.log(error);
@@ -85,41 +85,55 @@ server.get("/pagos", async  (req, res)=>{
   const external_reference = req.query.external_reference // MAIL DE USUARIO
   const merchant_order_id= req.query.merchant_order_id
 
-  if(payment_status === "approved") {
+  try {
 
-    let usuario = await User.findByPk(external_reference)
+    if(payment_status === "approved") {
 
-    for (let i = 0; i < usuario.cart.length; i++) {
-      
-      let publicacion = await Publication.findByPk(usuario.cart[i].id)
-      await Publication.update({ stock: publicacion.stock - publicacion.qty }, { where: { id: usuario.cart[i].id } });
-      await Publication.update({ qty: null }, { where: { id: usuario.cart[i].id } });
-      
+      let usuario = await User.findByPk(external_reference)
+  
+      for (let i = 0; i < usuario.cart.length; i++) {
+        
+        let publicacion = await Publication.findByPk(usuario.cart[i].id)
+        await Publication.update({ stock: publicacion.stock - publicacion.qty }, { where: { id: usuario.cart[i].id } });
+        await Publication.update({ qty: null }, { where: { id: usuario.cart[i].id } });
+  
+      }
+  
+      if(usuario.shopping === null) {
+  
+      await User.update({ shopping: usuario.cart, cart: null, emptyCart: true, sendEmail: true}, { where: { email: external_reference } });
+      const getInfo = await User.findByPk(external_reference)
+
+      } else {
+  
+        await User.update(
+          { shopping: usuario.shopping.concat(usuario.cart), cart: null, emptyCart: true, sendEmail: true },
+          { where: { email: external_reference } }
+        );
+         const getInfo = await User.findByPk(external_reference)
+   
+      }
+
+      return res.redirect("https://25a-front.vercel.app/home")
+  
     }
 
-    if(usuario.shopping === null) {
+    if(payment_status === "cancelled") {
 
-      await User.update({ shopping: usuario.cart }, { where: { email: external_reference } });
-
-    } else {
-      await User.update(
-        { shopping: usuario.shopping.concat(usuario.cart) },
-        { where: { email: external_reference } }
-      );
+      console.log("Su pago fue cancelado");
+      return res.redirect("https://25a-front.vercel.app/home")
+      
     }
+    
+  } catch (error) {
+    
 
-    return res.redirect("https://25a-front.vercel.app/home")
-
-  } else {
-
+    console.log(error);
+    console.log("Hubo algun error con su pago y no pudo ejecutarse");
     return res.redirect("https://25a-front.vercel.app/home")
 
   }
 
-
-  //proceso los datos del pago 
-  //redirijo de nuevo a react con mensaje de exito, falla o pendiente
-  //res.send(`${payment_id} ${payment_status} ${external_reference} ${merchant_order_id} `)
 })
 
 

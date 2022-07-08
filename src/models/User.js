@@ -54,12 +54,27 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true
     },
+
     isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    sendEmail: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
 
 
+    emptyCart: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    
+    banned: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
+    
   });
 
 };

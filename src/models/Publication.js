@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
     },
 
     images: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false
     },
 
@@ -108,7 +108,12 @@ module.exports = (sequelize) => {
     qty: {
       type: DataTypes.INTEGER,
       allowNull: true
-    }
+    },
+
+    additionalphotos:{
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: true
+    },
 
   });
 };
