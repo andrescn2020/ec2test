@@ -33,7 +33,7 @@ mercadopago.configure({
     quantity: i.qty,
   }))
 
-  console.info('carrito', items_ml)
+  // console.info('carrito', items_ml)
   // Crea un objeto de preferencia
   let preference = {
     items: items_ml,
