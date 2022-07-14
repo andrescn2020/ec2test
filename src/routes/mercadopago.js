@@ -44,7 +44,6 @@ mercadopago.configure({
       pending: 'http://localhost:3001/mercadopago/pagos',
     }
   };
-  console.log(preference);
 
   mercadopago.preferences.create(preference)
 
