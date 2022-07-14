@@ -1,4 +1,4 @@
-const { Order_detail , Order , User, Publication } = require('../db.js');
+const { User, Publication } = require('../db.js');
 
 const {
     PROD_ACCESS_TOKEN,
@@ -20,9 +20,9 @@ server.post("/", async (req, res, next)=>{
     await Publication.update({ qty: cart[0][i].qty }, { where: { id: cart[0][i].id } });
 
   }
+  // cargamos el carrido de la bd
 
-
-
+  // Agrega credenciales
 mercadopago.configure({
     access_token: PROD_ACCESS_TOKEN
   });
@@ -34,16 +34,17 @@ mercadopago.configure({
   }))
 
   console.info('carrito', items_ml)
-
+  // Crea un objeto de preferencia
   let preference = {
     items: items_ml,
     external_reference : `${email}`, //`${new Date().valueOf()}`,
     back_urls: {
-      success: 'https://back25ademo.herokuapp.com/mercadopago/pagos',
-      failure: 'https://back25ademo.herokuapp.com/mercadopago/pagos',
-      pending: 'https://back25ademo.herokuapp.com/mercadopago/pagos',
+      success: 'http://localhost:3001/mercadopago/pagos',
+      failure: 'http://localhost:3001/mercadopago/pagos',
+      pending: 'http://localhost:3001/mercadopago/pagos',
     }
   };
+  console.log(preference);
 
   mercadopago.preferences.create(preference)
 
@@ -84,6 +85,7 @@ server.get("/pagos", async  (req, res)=>{
   const payment_status= req.query.status // ESTADO DE LA OPERACION
   const external_reference = req.query.external_reference // MAIL DE USUARIO
   const merchant_order_id= req.query.merchant_order_id
+  // console.log(req.query);
 
   try {
 
@@ -114,14 +116,14 @@ server.get("/pagos", async  (req, res)=>{
    
       }
 
-      return res.redirect("https://25a-front.vercel.app/home")
+      return res.redirect("http://localhost:3000/home")
   
     }
 
     if(payment_status === "cancelled") {
 
       console.log("Su pago fue cancelado");
-      return res.redirect("https://25a-front.vercel.app/home")
+      return res.redirect("http://localhost:3000/home")
       
     }
     
@@ -130,7 +132,7 @@ server.get("/pagos", async  (req, res)=>{
 
     console.log(error);
     console.log("Hubo algun error con su pago y no pudo ejecutarse");
-    return res.redirect("https://25a-front.vercel.app/home")
+    return res.redirect("http://localhost:3000/home")
 
   }
 
