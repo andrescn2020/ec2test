@@ -9,7 +9,7 @@ const validacioncampos = (req, res, next) =>{
         errors: errors.errors[0]
      });
     }
-    next();
+    next()
 }
 
 module.exports = {
