@@ -3,18 +3,23 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const {
-  DATABASE_URL
+  DB_DEPLOY
 } = process.env;
 
-const sequelize = new Sequelize(DATABASE_URL, {
+// const sequelize = new Sequelize(DATABASE_URL, {
+//   logging: false, // set to console.log to see the raw SQL queries
+//   native: false, // lets Sequelize know we can use pg-native for ~30% more ostgspeed
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       rejectUnauthorized: false
+//     }
+//   }
+// });
+
+const sequelize = new Sequelize(DB_DEPLOY, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more ostgspeed
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  }
 });
 
 const basename = path.basename(__filename);
