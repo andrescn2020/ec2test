@@ -2,25 +2,26 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+
 const {
-  DB_DEPLOY
+  DATABASE_URL
 } = process.env;
 
-// const sequelize = new Sequelize(DATABASE_URL, {
-//   logging: false, // set to console.log to see the raw SQL queries
-//   native: false, // lets Sequelize know we can use pg-native for ~30% more ostgspeed
-//   dialectOptions: {
-//     ssl: {
-//       require: true,
-//       rejectUnauthorized: false
-//     }
-//   }
-// });
-
-const sequelize = new Sequelize(DB_DEPLOY, {
+const sequelize = new Sequelize(DATABASE_URL, {
   logging: false, // set to console.log to see the raw SQL queries
-  native: false, // lets Sequelize know we can use pg-native for ~30% more ostgspeed
+  native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
 });
+
+//const sequelize = new Sequelize(DB_DEPLOY, {
+//  logging: false, // set to console.log to see the raw SQL queries
+//  native: false, // lets Sequelize know we can use pg-native for ~30% more ostgspeed
+//});
 
 const basename = path.basename(__filename);
 
